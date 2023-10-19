@@ -1,0 +1,33 @@
+import cv2
+import numpy as np
+
+cap = cv2.VideoCapture("C:/Users/91934/Downloads/BB_ff1dabbd-7d43-4038-b568-bde623774535_preview.mp4")
+
+while True:
+    ret, frame = cap.read()
+
+    if not ret:
+        break  # Break out of the loop when there are no more frames
+
+    # Define the source and destination points for the perspective transformation
+    pts1 = np.float32([[200, 300], [5, 2], [0, 4], [6, 0]])
+    pts2 = np.float32([[0, 0], [300, 0], [0, 400], [300, 400]])
+
+    # Calculate the perspective transformation matrix
+    matrix = cv2.getPerspectiveTransform(pts1, pts2)
+
+    # Specify a valid output size (e.g., (300, 400))
+    output_size = (300, 400)
+
+    # Apply the perspective transformation to the frame
+    result = cv2.warpPerspective(frame, matrix, output_size)
+
+    # Display the original frame and the transformed frame
+    cv2.imshow('Original Frame', frame)
+    cv2.imshow('Transformed Frame', result)
+
+    if cv2.waitKey(24) == 27:
+        break
+
+cap.release()
+cv2.destroyAllWindows()
